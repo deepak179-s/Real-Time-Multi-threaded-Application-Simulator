@@ -1,106 +1,87 @@
 # Real-Time Multi-threaded Application Simulator
-### Desktop App — Electron
 
----
+Interactive simulator for threading models, synchronization primitives, CPU scheduling, and deadlock handling.
 
-## 🚀 Quick Start (2 commands)
+The project now supports both:
+
+- Electron desktop mode
+- Static web deployment for Vercel, Render, or any static host
+
+## Run Locally
+
+Install dependencies once:
 
 ```bash
-# 1. Install Electron
 npm install
+```
 
-# 2. Launch the app
+Launch the Electron app:
+
+```bash
 npm start
 ```
 
-That's it. The app window opens immediately.
+Launch the browser version:
 
----
-
-## 📁 Folder Structure
-
+```bash
+npm run web
 ```
-multithreaded-sim/
-├── main.js          ← Electron main process (window creation)
-├── preload.js       ← Context bridge
-├── package.json     ← Dependencies
+
+The local web preview starts on `http://127.0.0.1:4173`.
+
+## Available Scripts
+
+```bash
+npm start         # Electron app
+npm run desktop   # Electron app
+npm run dev       # Electron app with DevTools
+npm run desktop:dev
+npm run web       # Static web preview
+npm run preview   # Alias for web preview
+```
+
+## Deployment
+
+### Vercel
+
+1. Import the GitHub repository into Vercel.
+2. Keep the project as a static site.
+3. No build command is required.
+4. The included `vercel.json` rewrites requests to `index.html`.
+
+### Render
+
+1. Create a new Static Site.
+2. Point it to this repository.
+3. Set the publish directory to the repo root if Render asks.
+4. The included `render.yaml` keeps routing on the shared web entry.
+
+## Project Structure
+
+```text
+.
+├── index.html               # Shared web entry used by both browser and Electron
+├── main.js                  # Electron main process
+├── preload.js               # Electron preload bridge
+├── render.yaml              # Render static hosting config
+├── vercel.json              # Vercel routing config
+├── scripts/
+│   └── serve-static.js      # Local web preview server
 └── src/
-    ├── index.html   ← App entry point
-    ├── styles.css   ← Full dark-theme stylesheet
-    ├── engine.js    ← Simulation engine (threads, sync, scheduler, deadlock)
-    └── app.js       ← UI rendering & interaction
+    ├── app.js               # UI rendering and interaction
+    ├── engine.js            # Simulation engines
+    ├── index.html           # Legacy source entry
+    └── styles.css           # Shared styling
 ```
 
----
+## What Changed
 
-## 🖥 System Requirements
+- The Electron shell now loads the shared root `index.html`.
+- The UI detects whether it is running in Electron or a browser.
+- The same visual design is preserved across both runtimes.
+- Static hosting configuration is included for Vercel and Render.
 
-- **Node.js** v16 or higher → https://nodejs.org
-- **npm** v7 or higher (comes with Node.js)
-- Windows 10+, macOS 10.15+, or Ubuntu 18.04+
+## Notes
 
----
-
-## 📦 Manual Install (if npm install fails)
-
-```bash
-npm install --save-dev electron@latest
-```
-
-Or install Electron globally:
-```bash
-npm install -g electron
-electron .
-```
-
----
-
-## 🎮 How to Use Each Tab
-
-### Tab 1 — Threading Models
-1. Select model: Many-to-One / One-to-One / Many-to-Many
-2. Click **▶ Run** — watch threads animate through the CPU
-3. Click **+ Thread** to add more user threads mid-simulation
-4. Adjust the **Speed** slider (1x–10x)
-
-### Tab 2 — Synchronization
-1. Select primitive: **Semaphore**, **Monitor**, or **Barrier**
-2. Configure parameters (semaphore value, thread count)
-3. Click **▶ Run** — observe blocking, signaling, and CS access
-
-### Tab 3 — CPU Scheduler
-1. Select algorithm: RR / SJF / Priority / FCFS
-2. Set the time quantum for Round Robin
-3. Click **▶ Run** — Gantt chart builds in real-time
-4. Click **↺ Reset** to re-run with a different algorithm
-
-### Tab 4 — Deadlock
-1. Click **▶ Simulate** — watch circular wait form in stages
-2. Click **🔍 Detect** — Banker's Algorithm analysis appears
-3. Click **✓ Resolve** — preemption unwinds the deadlock
-4. Click **↺ Reset** to start over
-
----
-
-## 🛠 Development Mode (with DevTools)
-
-```bash
-npm run dev
-```
-
-This opens the app with Chrome DevTools detached for debugging.
-
----
-
-## 📦 Package as Installer
-
-Install electron-builder then build:
-```bash
-npm install --save-dev electron-builder
-npx electron-builder
-```
-
-Output will be in the `dist/` folder:
-- Windows: `.exe` installer
-- macOS: `.dmg`
-- Linux: `.AppImage`
+- Electron remains available, so you can continue using the desktop app at any time.
+- The browser deployment is fully static and does not require a backend.
