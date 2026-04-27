@@ -33,7 +33,6 @@ The local web preview starts on `http://127.0.0.1:4173`.
 
 ```bash
 npm start         # Electron app
-npm run desktop   # Electron app
 npm run dev       # Electron app with DevTools
 npm run desktop:dev
 npm run web       # Static web preview
