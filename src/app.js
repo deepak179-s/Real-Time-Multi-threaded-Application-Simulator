@@ -454,7 +454,7 @@ function buildSchedTab() {
         <option value="priority">Priority Scheduling</option>
         <option value="fcfs">FCFS</option>
       </select>
-      <span class="ctrl-label">Quantum:</span>
+      <span class="ctrl-label" id="quantum-label">Quantum:</span>
       <input type="number" class="ctrl-num" id="quantum-val" min="1" max="10" value="3">
       <button class="btn primary" id="btn-sched-run">▶ Run</button>
       <button class="btn" id="btn-sched-stop">■ Stop</button>
@@ -485,6 +485,18 @@ function buildSchedTab() {
   $('btn-sched-run').addEventListener('click', startSched);
   $('btn-sched-stop').addEventListener('click', stopSched);
   $('btn-sched-reset').addEventListener('click', resetSched);
+  
+  $('sched-algo').addEventListener('change', (e) => {
+    const isRR = e.target.value === 'rr';
+    if ($('quantum-label')) $('quantum-label').style.display = isRR ? 'inline' : 'none';
+    if ($('quantum-val')) $('quantum-val').style.display = isRR ? 'inline-block' : 'none';
+    resetSched();
+  });
+  
+  const initRR = $('sched-algo').value === 'rr';
+  if ($('quantum-label')) $('quantum-label').style.display = initRR ? 'inline' : 'none';
+  if ($('quantum-val')) $('quantum-val').style.display = initRR ? 'inline-block' : 'none';
+  
   resetSched();
 }
 
@@ -546,7 +558,7 @@ function renderSched() {
     cpu.innerHTML = `<div style="display:flex;align-items:center;gap:12px;padding:6px 0">
       <div style="width:44px;height:44px;border-radius:50%;background:${cur.color}18;border:2px solid ${cur.color};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:${cur.color};font-family:var(--mono)">${cur.id}</div>
       <div style="flex:1">
-        <div style="font-size:11px;color:var(--text2);margin-bottom:6px">${cur.id} — ${pct}% complete · remaining: ${cur.remaining} ticks · quantum left: ${schedEngine.quantumLeft}</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:6px">${cur.id} — ${pct}% complete · remaining: ${cur.remaining} ticks${schedEngine.algo === 'rr' ? ' · quantum left: ' + schedEngine.quantumLeft : ''}</div>
         <div class="prog-bar-bg" style="height:8px"><div class="prog-bar-fill" style="width:${pct}%;background:${cur.color};height:8px"></div></div>
       </div>
     </div>`;
