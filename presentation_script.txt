@@ -1,0 +1,36 @@
+Hello everyone, my name is Deepak Kumar. Joining me are Madhav Biyani and Sai Krishna. Today, we’re excited to present."ThreadLab: Real-Time Multi-threaded Application Simulator", a project designed to visualize core operating system concepts. 
+
+During this presentation, We will be demonstrating three major concepts: Multithreading models, Synchronization techniques, and CPU Scheduling algorithms.
+
+--- Part 1: Multithreading Models ---
+
+First, let's look at Multithreading. As we know multi-threading is a technique where a single process is broken down into multiple smaller tasks, called threads, that can run concurrently. This improves performance and responsiveness.
+Our simulator helps visualize how these user-level threads map to the operating system's kernel-level threads. 
+We demonstrate three main models:
+1. Many-to-One Model: Here, multiple user threads map to a single kernel thread. A major drawback here is that if one thread blocks—for example, waiting for I/O—the entire process blocks. In our simulator, you can clearly see how blocking one thread stalls the others.
+2. One-to-One Model: Every user thread maps to its own kernel thread. This provides true concurrency. As you can see in the simulator, if one thread blocks, the others continue running without interruption.
+3. Many-to-Many Model: This multiplexes many user threads onto a smaller or equal number of kernel threads, balancing concurrency with system overhead.
+
+Now madhav will explain 2nd Part
+
+--- Part 2: Synchronization ---
+
+Next, we move on to Synchronization. What is Synchronization? When multiple threads share the same memory or resources, they can conflict with each other. Synchronization ensures that threads access these shared resources in a controlled, orderly manner to prevent data corruption.
+
+1. Semaphores: What is a semaphore? It is an integer variable used as a signaling mechanism to control access to a common resource. We simulate a counting semaphore here. In the UI, you can see threads requesting access. Once the counter reaches zero, any additional threads are placed in a blocked queue until a resource is released.
+2. Monitors: We demonstrate this using a producer-consumer style behavior, where access to shared data is strictly controlled and mutually exclusive.
+
+--- Part 3: CPU Scheduling ---
+
+Finally, I'll demonstrate the CPU Scheduler. What is CPU Scheduling? It is the process of deciding which process or thread in the ready queue gets to use the CPU next. The main goal is to maximize CPU utilization and keep the system fair and efficient.
+
+ThreadLab allows you to visualize how processes are selected for execution over time using Gantt charts and progress tracking.
+We implemented four main algorithms:
+1. First-Come, First-Served (FCFS): A non-preemptive algorithm where the process that requests the CPU first is allocated first.
+2. Shortest Job First (SJF): Schedules the process with the smallest execution time next. This minimizes the overall average waiting time.
+3. Priority Scheduling: Each process has a priority, and the CPU is allocated to the highest priority process.
+4. Round Robin (RR): A preemptive algorithm where each process gets a small unit of CPU time, called a time quantum. In our simulator, we can dynamically adjust the quantum and see in real-time how it affects the scheduling overhead and context switching.
+
+To conclude, ThreadLab successfully makes abstract concurrency and operating system concepts visual and interactive, making it much easier to analyze and learn from compared to reading standard logs.
+
+Thank you for your time. I would be happy to take any questions!

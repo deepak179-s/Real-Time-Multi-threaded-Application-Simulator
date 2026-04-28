@@ -5,7 +5,7 @@
 
 // ── Helpers ───────────────────────────────────────────────
 const $ = id => document.getElementById(id);
-const el = (tag, cls, html) => { const e = document.createElement(tag); if(cls) e.className=cls; if(html!==undefined) e.innerHTML=html; return e; };
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; };
 const RUNTIME = window.electronAPI?.isElectron ? 'electron' : 'web';
 const RUNTIME_LABEL = RUNTIME === 'electron' ? 'Electron Desktop' : 'Web Browser';
 const PLATFORM = window.electronAPI?.platform || 'web';
@@ -26,7 +26,7 @@ function logTo(containerId, msg, cls = 'info') {
   while (el.children.length > 60) el.removeChild(el.lastChild);
 }
 
-function clearLog(id) { const e = $(id); if(e) e.innerHTML = ''; }
+function clearLog(id) { const e = $(id); if (e) e.innerHTML = ''; }
 
 // ── Build App Shell ───────────────────────────────────────
 function buildShell() {
@@ -204,7 +204,7 @@ function drawMappingSVG(snap) {
 
   // CPU bar
   d += `<rect x="80" y="${cpu_y}" width="440" height="14" rx="4" fill="#1e2636" stroke="#2a3347" stroke-width="0.5"/>`;
-  d += `<text x="300" y="${cpu_y+10}" text-anchor="middle" font-size="9" fill="#4a5568" font-family="JetBrains Mono">CPU HARDWARE</text>`;
+  d += `<text x="300" y="${cpu_y + 10}" text-anchor="middle" font-size="9" fill="#4a5568" font-family="JetBrains Mono">CPU HARDWARE</text>`;
 
   // Kernel threads
   snap.kernelThreads.forEach((k, i) => {
@@ -214,9 +214,9 @@ function drawMappingSVG(snap) {
     const fillCol = busy ? '#0d2818' : '#1e2636';
     const strokeCol = busy ? '#165a2e' : '#2a3347';
     const textCol = busy && ut ? ut.color : '#6b7a94';
-    d += `<rect x="${kx-22}" y="${ky}" width="44" height="22" rx="5" fill="${fillCol}" stroke="${strokeCol}" stroke-width="0.5"/>`;
-    d += `<text x="${kx}" y="${ky+15}" text-anchor="middle" font-size="10" fill="${textCol}" font-family="JetBrains Mono" font-weight="500">${k.id}</text>`;
-    d += `<line x1="${kx}" y1="${ky+22}" x2="${kx}" y2="${cpu_y}" stroke="#2a3347" stroke-width="0.5" stroke-dasharray="2 2"/>`;
+    d += `<rect x="${kx - 22}" y="${ky}" width="44" height="22" rx="5" fill="${fillCol}" stroke="${strokeCol}" stroke-width="0.5"/>`;
+    d += `<text x="${kx}" y="${ky + 15}" text-anchor="middle" font-size="10" fill="${textCol}" font-family="JetBrains Mono" font-weight="500">${k.id}</text>`;
+    d += `<line x1="${kx}" y1="${ky + 22}" x2="${kx}" y2="${cpu_y}" stroke="#2a3347" stroke-width="0.5" stroke-dasharray="2 2"/>`;
   });
 
   // User threads + mapping lines
@@ -229,12 +229,12 @@ function drawMappingSVG(snap) {
 
     const running = u.state === 'running';
     const alpha = running ? '1' : '0.25';
-    d += `<line x1="${ux}" y1="${uy+18}" x2="${kx}" y2="${ky}" stroke="${u.color}" stroke-width="${running?1.5:0.5}" opacity="${alpha}" stroke-dasharray="${running?'none':'3 2'}"/>`;
+    d += `<line x1="${ux}" y1="${uy + 18}" x2="${kx}" y2="${ky}" stroke="${u.color}" stroke-width="${running ? 1.5 : 0.5}" opacity="${alpha}" stroke-dasharray="${running ? 'none' : '3 2'}"/>`;
 
-    const light = {ready:'#0d1e33',running:'#0d2818',waiting:'#271d08',blocked:'#250d0d',done:'#1a1f2a'}[u.state]||'#1e2636';
-    const border = {ready:'#1a4a7a',running:'#165a2e',waiting:'#5a4210',blocked:'#5a1a1a',done:'#2a3347'}[u.state]||'#2a3347';
-    d += `<rect x="${ux-17}" y="${uy}" width="34" height="18" rx="4" fill="${light}" stroke="${border}" stroke-width="0.5"/>`;
-    d += `<text x="${ux}" y="${uy+13}" text-anchor="middle" font-size="9" fill="${u.color}" font-family="JetBrains Mono" font-weight="500">${u.id}</text>`;
+    const light = { ready: '#0d1e33', running: '#0d2818', waiting: '#271d08', blocked: '#250d0d', done: '#1a1f2a' }[u.state] || '#1e2636';
+    const border = { ready: '#1a4a7a', running: '#165a2e', waiting: '#5a4210', blocked: '#5a1a1a', done: '#2a3347' }[u.state] || '#2a3347';
+    d += `<rect x="${ux - 17}" y="${uy}" width="34" height="18" rx="4" fill="${light}" stroke="${border}" stroke-width="0.5"/>`;
+    d += `<text x="${ux}" y="${uy + 13}" text-anchor="middle" font-size="9" fill="${u.color}" font-family="JetBrains Mono" font-weight="500">${u.id}</text>`;
   });
 
   svg.innerHTML = d;
@@ -311,7 +311,7 @@ function initSync() {
     opts.threadCount = parseInt($('sync-tcount')?.value) || 5;
   }
   syncEngine.init(type, opts);
-  $('sync-state-title').textContent = {sem:'Semaphore State',monitor:'Monitor / Buffer State'}[type];
+  $('sync-state-title').textContent = { sem: 'Semaphore State', monitor: 'Monitor / Buffer State' }[type];
 }
 
 function startSync() {
@@ -321,7 +321,7 @@ function startSync() {
   syncInterval = setInterval(() => {
     const done = syncEngine.tick();
     renderSync();
-    if (done) { stopSync(); logTo('log-sync','Simulation complete ✓','ok'); }
+    if (done) { stopSync(); logTo('log-sync', 'Simulation complete ✓', 'ok'); }
   }, 480);
 }
 
@@ -338,7 +338,7 @@ function renderSync() {
   // Thread states
   $('sync-threads').innerHTML = threads.map(t => {
     let meta = '';
-    if (type === 'monitor' && t.role) meta = `<span class="thread-meta">${t.role}${t.produced!=null?' prod='+t.produced:''}${t.consumed!=null?' cons='+t.consumed:''}</span>`;
+    if (type === 'monitor' && t.role) meta = `<span class="thread-meta">${t.role}${t.produced != null ? ' prod=' + t.produced : ''}${t.consumed != null ? ' cons=' + t.consumed : ''}</span>`;
     if (type === 'sem' && t.inCS) meta = `<span class="thread-meta" style="color:#3b8cff">in CS</span>`;
     const st = t.state === STATE.RUNNING ? 'running' : t.state;
     return chipHTML(t.id, st, meta);
@@ -355,21 +355,20 @@ function renderSync() {
       <div class="sem-block">
         <div class="sem-counter ${cls}">${v}</div>
         <div>
-          <div class="sem-info">Value: ${v} / ${max} ${v===0?'(all slots taken)':'('+v+' available)'}</div>
-          <div class="sem-info-sub">Blocked: ${blocked.join(', ')||'none'}</div>
-          <div class="sem-info-sub">In critical section: ${inCS.join(', ')||'none'}</div>
+          <div class="sem-info">Value: ${v} / ${max} ${v === 0 ? '(all slots taken)' : '(' + v + ' available)'}</div>
+          <div class="sem-info-sub">Blocked: ${blocked.join(', ') || 'none'}</div>
+          <div class="sem-info-sub">In critical section: ${inCS.join(', ') || 'none'}</div>
         </div>
       </div>
-      <div style="display:flex;gap:4px;margin-top:6px">${
-        Array.from({length:max},(_,i)=>`<div style="width:20px;height:8px;border-radius:2px;background:${i<v?'#22c55e':'#250d0d'};border:1px solid ${i<v?'#165a2e':'#5a1a1a'}"></div>`).join('')
+      <div style="display:flex;gap:4px;margin-top:6px">${Array.from({ length: max }, (_, i) => `<div style="width:20px;height:8px;border-radius:2px;background:${i < v ? '#22c55e' : '#250d0d'};border:1px solid ${i < v ? '#165a2e' : '#5a1a1a'}"></div>`).join('')
       }</div>`;
   } else if (type === 'monitor') {
     const bs = syncEngine.bufferSize, bm = syncEngine.bufferMax;
     sb.innerHTML = `
       <div style="font-size:11px;line-height:1.9;font-family:var(--mono)">
-        <div>Lock: <b style="color:${syncEngine.monitorLocked?'#f59e0b':'#22c55e'}">${syncEngine.monitorLocked?'🔒 '+syncEngine.monitorOwner:'🔓 free'}</b></div>
-        <div>Buffer: <span style="font-family:var(--mono);letter-spacing:2px">${Array.from({length:bm},(_,i)=>i<bs?'▮':'▯').join(' ')}</span> ${bs}/${bm}</div>
-        <div>Waiting: ${threads.filter(t=>t.state===STATE.WAITING).map(t=>t.id).join(', ')||'none'}</div>
+        <div>Lock: <b style="color:${syncEngine.monitorLocked ? '#f59e0b' : '#22c55e'}">${syncEngine.monitorLocked ? '🔒 ' + syncEngine.monitorOwner : '🔓 free'}</b></div>
+        <div>Buffer: <span style="font-family:var(--mono);letter-spacing:2px">${Array.from({ length: bm }, (_, i) => i < bs ? '▮' : '▯').join(' ')}</span> ${bs}/${bm}</div>
+        <div>Waiting: ${threads.filter(t => t.state === STATE.WAITING).map(t => t.id).join(', ') || 'none'}</div>
       </div>`;
   }
 
@@ -384,20 +383,20 @@ function drawSyncSVG(type) {
   if (type === 'sem') {
     const n = threads.length, sp = 560 / (n + 1);
     threads.forEach((t, i) => {
-      const x = sp*(i+1)+20, y=20;
-      const fills = {ready:'#0d1e33',running:'#0d2818',blocked:'#250d0d',done:'#1a1f2a',waiting:'#271d08'};
-      const strokes = {ready:'#1a4a7a',running:'#165a2e',blocked:'#5a1a1a',done:'#2a3347',waiting:'#5a4210'};
-      const txtcols = {ready:'#3b8cff',running:'#22c55e',blocked:'#ef4444',done:'#6b7a94',waiting:'#f59e0b'};
-      const st = t.state===STATE.RUNNING?'running':t.state;
-      d += `<rect x="${x-18}" y="${y}" width="36" height="20" rx="4" fill="${fills[st]||'#1a1f2a'}" stroke="${strokes[st]||'#2a3347'}" stroke-width="0.5"/>`;
-      d += `<text x="${x}" y="${y+14}" text-anchor="middle" font-size="10" fill="${txtcols[st]||'#6b7a94'}" font-family="JetBrains Mono" font-weight="500">${t.id}</text>`;
-      if (t.inCS) d += `<line x1="${x}" y1="${y+20}" x2="300" y2="80" stroke="${t.color||'#22c55e'}" stroke-width="1.5"/>`;
-      else if (t.state===STATE.BLOCKED) d += `<line x1="${x}" y1="${y+20}" x2="300" y2="80" stroke="#ef4444" stroke-width="0.5" stroke-dasharray="3 2"/>`;
+      const x = sp * (i + 1) + 20, y = 20;
+      const fills = { ready: '#0d1e33', running: '#0d2818', blocked: '#250d0d', done: '#1a1f2a', waiting: '#271d08' };
+      const strokes = { ready: '#1a4a7a', running: '#165a2e', blocked: '#5a1a1a', done: '#2a3347', waiting: '#5a4210' };
+      const txtcols = { ready: '#3b8cff', running: '#22c55e', blocked: '#ef4444', done: '#6b7a94', waiting: '#f59e0b' };
+      const st = t.state === STATE.RUNNING ? 'running' : t.state;
+      d += `<rect x="${x - 18}" y="${y}" width="36" height="20" rx="4" fill="${fills[st] || '#1a1f2a'}" stroke="${strokes[st] || '#2a3347'}" stroke-width="0.5"/>`;
+      d += `<text x="${x}" y="${y + 14}" text-anchor="middle" font-size="10" fill="${txtcols[st] || '#6b7a94'}" font-family="JetBrains Mono" font-weight="500">${t.id}</text>`;
+      if (t.inCS) d += `<line x1="${x}" y1="${y + 20}" x2="300" y2="80" stroke="${t.color || '#22c55e'}" stroke-width="1.5"/>`;
+      else if (t.state === STATE.BLOCKED) d += `<line x1="${x}" y1="${y + 20}" x2="300" y2="80" stroke="#ef4444" stroke-width="0.5" stroke-dasharray="3 2"/>`;
     });
     const v = syncEngine.semValue, max = syncEngine.semMax;
-    const cls_c = v===0?'#250d0d':v===max?'#0d2818':'#1e2636';
-    const cls_s = v===0?'#5a1a1a':v===max?'#165a2e':'#2a3347';
-    const cls_t = v===0?'#ef4444':v===max?'#22c55e':'#b0bac8';
+    const cls_c = v === 0 ? '#250d0d' : v === max ? '#0d2818' : '#1e2636';
+    const cls_s = v === 0 ? '#5a1a1a' : v === max ? '#165a2e' : '#2a3347';
+    const cls_t = v === 0 ? '#ef4444' : v === max ? '#22c55e' : '#b0bac8';
     d += `<rect x="264" y="68" width="72" height="44" rx="8" fill="${cls_c}" stroke="${cls_s}" stroke-width="1"/>`;
     d += `<text x="300" y="87" text-anchor="middle" font-size="9" fill="${cls_t}" font-family="JetBrains Mono">SEMAPHORE</text>`;
     d += `<text x="300" y="103" text-anchor="middle" font-size="20" fill="${cls_t}" font-family="JetBrains Mono" font-weight="600">${v}</text>`;
@@ -405,33 +404,33 @@ function drawSyncSVG(type) {
   } else if (type === 'monitor') {
     // Buffer cells
     const bm = syncEngine.bufferMax;
-    for (let i=0;i<bm;i++) {
-      const x = 200+i*70, filled = i<syncEngine.bufferSize;
-      d += `<rect x="${x}" y="65" width="54" height="36" rx="5" fill="${filled?'#0d2818':'#1e2636'}" stroke="${filled?'#165a2e':'#2a3347'}" stroke-width="0.5"/>`;
-      if (filled) d += `<text x="${x+27}" y="${65+24}" text-anchor="middle" font-size="16" fill="#22c55e" font-family="JetBrains Mono">■</text>`;
+    for (let i = 0; i < bm; i++) {
+      const x = 200 + i * 70, filled = i < syncEngine.bufferSize;
+      d += `<rect x="${x}" y="65" width="54" height="36" rx="5" fill="${filled ? '#0d2818' : '#1e2636'}" stroke="${filled ? '#165a2e' : '#2a3347'}" stroke-width="0.5"/>`;
+      if (filled) d += `<text x="${x + 27}" y="${65 + 24}" text-anchor="middle" font-size="16" fill="#22c55e" font-family="JetBrains Mono">■</text>`;
     }
     d += `<text x="305" y="120" text-anchor="middle" font-size="9" fill="#4a5568" font-family="JetBrains Mono">BUFFER (${syncEngine.bufferSize}/${bm})</text>`;
     // Lock
     const lk = syncEngine.monitorLocked;
-    d += `<rect x="254" y="30" width="100" height="26" rx="4" fill="${lk?'#271d08':'#1e2636'}" stroke="${lk?'#5a4210':'#2a3347'}" stroke-width="0.5"/>`;
-    d += `<text x="304" y="47" text-anchor="middle" font-size="10" fill="${lk?'#f59e0b':'#22c55e'}" font-family="JetBrains Mono">${lk?'⚷ '+syncEngine.monitorOwner:'⚷ free'}</text>`;
+    d += `<rect x="254" y="30" width="100" height="26" rx="4" fill="${lk ? '#271d08' : '#1e2636'}" stroke="${lk ? '#5a4210' : '#2a3347'}" stroke-width="0.5"/>`;
+    d += `<text x="304" y="47" text-anchor="middle" font-size="10" fill="${lk ? '#f59e0b' : '#22c55e'}" font-family="JetBrains Mono">${lk ? '⚷ ' + syncEngine.monitorOwner : '⚷ free'}</text>`;
     // Producers left, consumers right
-    threads.forEach((t,i) => {
-      const st = t.state===STATE.RUNNING?'running':t.state;
-      const fills = {ready:'#0d1e33',running:'#0d2818',waiting:'#271d08',done:'#1a1f2a'};
-      const strokes = {ready:'#1a4a7a',running:'#165a2e',waiting:'#5a4210',done:'#2a3347'};
-      const txtcols = {ready:'#3b8cff',running:'#22c55e',waiting:'#f59e0b',done:'#6b7a94'};
-      if (t.role==='producer') {
-        const x=30+i*70, y=65;
-        d += `<rect x="${x}" y="${y}" width="54" height="22" rx="4" fill="${fills[st]||'#1e2636'}" stroke="${strokes[st]||'#2a3347'}" stroke-width="0.5"/>`;
-        d += `<text x="${x+27}" y="${y+15}" text-anchor="middle" font-size="10" fill="${txtcols[st]||'#6b7a94'}" font-family="JetBrains Mono" font-weight="500">${t.id}</text>`;
-        d += `<line x1="${x+54}" y1="${y+11}" x2="198" y2="83" stroke="#2a3347" stroke-width="0.5" marker-end="url(#sa)"/>`;
+    threads.forEach((t, i) => {
+      const st = t.state === STATE.RUNNING ? 'running' : t.state;
+      const fills = { ready: '#0d1e33', running: '#0d2818', waiting: '#271d08', done: '#1a1f2a' };
+      const strokes = { ready: '#1a4a7a', running: '#165a2e', waiting: '#5a4210', done: '#2a3347' };
+      const txtcols = { ready: '#3b8cff', running: '#22c55e', waiting: '#f59e0b', done: '#6b7a94' };
+      if (t.role === 'producer') {
+        const x = 30 + i * 70, y = 65;
+        d += `<rect x="${x}" y="${y}" width="54" height="22" rx="4" fill="${fills[st] || '#1e2636'}" stroke="${strokes[st] || '#2a3347'}" stroke-width="0.5"/>`;
+        d += `<text x="${x + 27}" y="${y + 15}" text-anchor="middle" font-size="10" fill="${txtcols[st] || '#6b7a94'}" font-family="JetBrains Mono" font-weight="500">${t.id}</text>`;
+        d += `<line x1="${x + 54}" y1="${y + 11}" x2="198" y2="83" stroke="#2a3347" stroke-width="0.5" marker-end="url(#sa)"/>`;
       } else {
-        const ci = threads.filter(x=>x.role==='consumer').indexOf(t);
-        const x=462+ci*70, y=65;
-        d += `<rect x="${x}" y="${y}" width="54" height="22" rx="4" fill="${fills[st]||'#1e2636'}" stroke="${strokes[st]||'#2a3347'}" stroke-width="0.5"/>`;
-        d += `<text x="${x+27}" y="${y+15}" text-anchor="middle" font-size="10" fill="${txtcols[st]||'#6b7a94'}" font-family="JetBrains Mono" font-weight="500">${t.id}</text>`;
-        d += `<line x1="${x}" y1="${y+11}" x2="${200+bm*70}" y2="83" stroke="#2a3347" stroke-width="0.5" marker-end="url(#sa)"/>`;
+        const ci = threads.filter(x => x.role === 'consumer').indexOf(t);
+        const x = 462 + ci * 70, y = 65;
+        d += `<rect x="${x}" y="${y}" width="54" height="22" rx="4" fill="${fills[st] || '#1e2636'}" stroke="${strokes[st] || '#2a3347'}" stroke-width="0.5"/>`;
+        d += `<text x="${x + 27}" y="${y + 15}" text-anchor="middle" font-size="10" fill="${txtcols[st] || '#6b7a94'}" font-family="JetBrains Mono" font-weight="500">${t.id}</text>`;
+        d += `<line x1="${x}" y1="${y + 11}" x2="${200 + bm * 70}" y2="83" stroke="#2a3347" stroke-width="0.5" marker-end="url(#sa)"/>`;
       }
     });
   }
@@ -477,7 +476,7 @@ function buildSchedTab() {
         <div class="gantt-wrap" id="gantt-area"></div>
       </div>
       <div class="card">
-        <div class="card-title">Process Table</div>
+        <div class="card-title">Thread Table</div>
         <div id="proc-table" style="overflow-x:auto"></div>
       </div>
     </div>`;
@@ -485,25 +484,25 @@ function buildSchedTab() {
   $('btn-sched-run').addEventListener('click', startSched);
   $('btn-sched-stop').addEventListener('click', stopSched);
   $('btn-sched-reset').addEventListener('click', resetSched);
-  
+
   $('sched-algo').addEventListener('change', (e) => {
     const isRR = e.target.value === 'rr';
     if ($('quantum-label')) $('quantum-label').style.display = isRR ? 'inline' : 'none';
     if ($('quantum-val')) $('quantum-val').style.display = isRR ? 'inline-block' : 'none';
     resetSched();
   });
-  
+
   const initRR = $('sched-algo').value === 'rr';
   if ($('quantum-label')) $('quantum-label').style.display = initRR ? 'inline' : 'none';
   if ($('quantum-val')) $('quantum-val').style.display = initRR ? 'inline-block' : 'none';
-  
+
   resetSched();
 }
 
 function resetSched() {
   stopSched();
   schedEngine = new SchedulerEngine();
-  schedEngine.init($('sched-algo')?.value||'rr', parseInt($('quantum-val')?.value)||3);
+  schedEngine.init($('sched-algo')?.value || 'rr', parseInt($('quantum-val')?.value) || 3);
   renderSched();
 }
 
@@ -511,7 +510,7 @@ function startSched() {
   if (schedRunning) return;
   stopSched();
   schedEngine = new SchedulerEngine();
-  schedEngine.init($('sched-algo').value, parseInt($('quantum-val').value)||3);
+  schedEngine.init($('sched-algo').value, parseInt($('quantum-val').value) || 3);
   schedRunning = true;
   $('btn-sched-run').disabled = true;
   schedInterval = setInterval(() => {
@@ -528,7 +527,7 @@ function stopSched() {
 }
 
 function renderSched() {
-  const procs = schedEngine.processes;
+  const procs = schedEngine.threads;
   const stats = schedEngine.getStats();
   const maxTick = Math.max(schedEngine.tick, 1);
 
@@ -543,8 +542,8 @@ function renderSched() {
   const rq = $('ready-queue');
   const ready = procs.filter(p => p.state === STATE.READY && p.arrival <= schedEngine.tick);
   if (ready.length) {
-    rq.innerHTML = ready.map((p,i) =>
-      `${i>0?'<span class="rq-arrow">›</span>':''}<span class="rq-chip" style="border-color:${p.color};color:${p.color};background:${p.color}18">${p.id}<span style="opacity:.6;font-size:9px;margin-left:3px">${p.remaining}</span></span>`
+    rq.innerHTML = ready.map((p, i) =>
+      `${i > 0 ? '<span class="rq-arrow">›</span>' : ''}<span class="rq-chip" style="border-color:${p.color};color:${p.color};background:${p.color}18">${p.id}<span style="opacity:.6;font-size:9px;margin-left:3px">${p.remaining}</span></span>`
     ).join('');
   } else {
     rq.innerHTML = `<span style="font-size:11px;color:var(--text3)">empty</span>`;
@@ -552,9 +551,9 @@ function renderSched() {
 
   // CPU
   const cpu = $('sched-cpu');
-  const cur = schedEngine.currentProc;
+  const cur = schedEngine.currentThread;
   if (cur) {
-    const pct = Math.round((1 - cur.remaining/cur.burst)*100);
+    const pct = Math.round((1 - cur.remaining / cur.burst) * 100);
     cpu.innerHTML = `<div style="display:flex;align-items:center;gap:12px;padding:6px 0">
       <div style="width:44px;height:44px;border-radius:50%;background:${cur.color}18;border:2px solid ${cur.color};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:${cur.color};font-family:var(--mono)">${cur.id}</div>
       <div style="flex:1">
@@ -583,16 +582,16 @@ function renderSched() {
     </div>`;
   }).join('');
 
-  // Process table
+  // Thread table
   $('proc-table').innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:11px;font-family:var(--mono)">
-    <tr style="border-bottom:1px solid var(--border)">${['PID','Burst','Remaining','Priority','Arrival','State','Wait'].map(h=>`<th style="padding:5px 8px;text-align:left;font-size:9px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">${h}</th>`).join('')}</tr>
-    ${procs.map(p=>`<tr style="border-bottom:1px solid var(--border)">
+    <tr style="border-bottom:1px solid var(--border)">${['TID', 'Burst', 'Remaining', 'Priority', 'Arrival', 'State', 'Wait'].map(h => `<th style="padding:5px 8px;text-align:left;font-size:9px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">${h}</th>`).join('')}</tr>
+    ${procs.map(p => `<tr style="border-bottom:1px solid var(--border)">
       <td style="padding:4px 8px;font-weight:600;color:${p.color}">${p.id}</td>
       <td style="padding:4px 8px;color:var(--text1)">${p.burst}</td>
       <td style="padding:4px 8px;color:var(--text1)">${p.remaining}</td>
       <td style="padding:4px 8px;color:var(--text1)">${p.priority}</td>
       <td style="padding:4px 8px;color:var(--text1)">${p.arrival}</td>
-      <td style="padding:4px 8px"><span class="thread-chip chip-${p.state===STATE.DONE?'done':p.state===STATE.RUNNING?'running':'ready'}" style="font-size:9px;padding:2px 7px">${p.state}</span></td>
+      <td style="padding:4px 8px"><span class="thread-chip chip-${p.state === STATE.DONE ? 'done' : p.state === STATE.RUNNING ? 'running' : 'ready'}" style="font-size:9px;padding:2px 7px">${p.state}</span></td>
       <td style="padding:4px 8px;color:var(--text1)">${p.wait}</td>
     </tr>`).join('')}
   </table>`;

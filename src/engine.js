@@ -286,11 +286,11 @@ class SyncEngine {
 // ── CPU Scheduler Engine ───────────────────────────────────
 class SchedulerEngine {
   constructor() {
-    this.processes = [];
+    this.threads = [];
     this.algo = 'rr';
     this.quantum = 3;
     this.tick = 0;
-    this.currentProc = null;
+    this.currentThread = null;
     this.quantumLeft = 0;
     this.rrQueue = [];
     this.gantt = []; // {id, start, end, color}
@@ -308,22 +308,22 @@ class SchedulerEngine {
 
   init(algo, quantum) {
     this.algo = algo; this.quantum = quantum || 3;
-    this.tick = 0; this.currentProc = null; this.quantumLeft = 0;
+    this.tick = 0; this.currentThread = null; this.quantumLeft = 0;
     this.gantt = []; this.ganttCurrent = null; this.logs = [];
-    this.processes = [
-      {id:'P1', burst:8, remaining:8, priority:2, arrival:0, state:STATE.READY, start:-1, finish:-1, wait:0, color:'#3b8cff'},
-      {id:'P2', burst:5, remaining:5, priority:1, arrival:1, state:STATE.READY, start:-1, finish:-1, wait:0, color:'#22c55e'},
-      {id:'P3', burst:3, remaining:3, priority:3, arrival:2, state:STATE.READY, start:-1, finish:-1, wait:0, color:'#f59e0b'},
-      {id:'P4', burst:6, remaining:6, priority:2, arrival:0, state:STATE.READY, start:-1, finish:-1, wait:0, color:'#a855f7'},
+    this.threads = [
+      {id:'T1', burst:8, remaining:8, priority:2, arrival:0, state:STATE.READY, start:-1, finish:-1, wait:0, color:'#3b8cff'},
+      {id:'T2', burst:5, remaining:5, priority:1, arrival:1, state:STATE.READY, start:-1, finish:-1, wait:0, color:'#22c55e'},
+      {id:'T3', burst:3, remaining:3, priority:3, arrival:2, state:STATE.READY, start:-1, finish:-1, wait:0, color:'#f59e0b'},
+      {id:'T4', burst:6, remaining:6, priority:2, arrival:0, state:STATE.READY, start:-1, finish:-1, wait:0, color:'#a855f7'},
     ];
-    this.rrQueue = this.processes.map(p => p.id);
+    this.rrQueue = this.threads.map(t => t.id);
   }
 
   _selectNext() {
-    const ready = this.processes.filter(p => p.state === STATE.READY && p.arrival <= this.tick);
+    const ready = this.threads.filter(t => t.state === STATE.READY && t.arrival <= this.tick);
     if (!ready.length) return null;
     if (this.algo === 'rr') {
-      for (const id of this.rrQueue) { const p = ready.find(r => r.id === id); if (p) return p; }
+      for (const id of this.rrQueue) { const t = ready.find(r => r.id === id); if (t) return t; }
       return ready[0];
     }
     if (this.algo === 'sjf')      return ready.slice().sort((a,b) => a.remaining - b.remaining)[0];
@@ -333,8 +333,8 @@ class SchedulerEngine {
 
   step() {
     this.tick++;
-    if (this.currentProc) {
-      const p = this.currentProc;
+    if (this.currentThread) {
+      const p = this.currentThread;
       p.remaining--;
       this.quantumLeft--;
       // Gantt update
@@ -348,35 +348,35 @@ class SchedulerEngine {
         p.finish = this.tick; p.state = STATE.DONE;
         this.log(`${p.id} finished at t=${this.tick} (wait=${p.wait})`, 'ok');
         if (this.ganttCurrent) { this.gantt.push({...this.ganttCurrent}); this.ganttCurrent = null; }
-        this.currentProc = null; this.quantumLeft = 0;
+        this.currentThread = null; this.quantumLeft = 0;
       } else if (this.algo === 'rr' && this.quantumLeft <= 0) {
         p.state = STATE.READY;
         const idx = this.rrQueue.indexOf(p.id);
         if (idx > -1) { this.rrQueue.splice(idx, 1); this.rrQueue.push(p.id); }
         if (this.ganttCurrent) { this.gantt.push({...this.ganttCurrent}); this.ganttCurrent = null; }
-        this.currentProc = null; this.quantumLeft = 0;
+        this.currentThread = null; this.quantumLeft = 0;
         this.log(`${p.id} quantum expired → back to queue`, 'warn');
       }
     }
-    if (!this.currentProc) {
+    if (!this.currentThread) {
       const next = this._selectNext();
       if (next) {
         next.state = STATE.RUNNING;
         if (next.start === -1) next.start = this.tick;
-        this.currentProc = next;
+        this.currentThread = next;
         this.quantumLeft = this.quantum;
         this.log(`Scheduler selects ${next.id} (remaining=${next.remaining}, algo=${this.algo.toUpperCase()})`, 'info');
       }
     }
-    this.processes.filter(p => p.state === STATE.READY && p.arrival <= this.tick).forEach(p => p.wait++);
-    return this.processes.every(p => p.state === STATE.DONE);
+    this.threads.filter(t => t.state === STATE.READY && t.arrival <= this.tick).forEach(t => t.wait++);
+    return this.threads.every(t => t.state === STATE.DONE);
   }
 
   getStats() {
-    const done = this.processes.filter(p => p.state === STATE.DONE);
-    const avgWait = done.length ? (done.reduce((s,p)=>s+p.wait,0)/done.length).toFixed(1) : '-';
+    const done = this.threads.filter(t => t.state === STATE.DONE);
+    const avgWait = done.length ? (done.reduce((s,t)=>s+t.wait,0)/done.length).toFixed(1) : '-';
     const utilization = this.tick > 0 ? Math.round(this.gantt.reduce((s,g)=>s+(g.end-g.start),0)/this.tick*100) : 0;
-    return { tick: this.tick, done: done.length, total: this.processes.length, avgWait, utilization };
+    return { tick: this.tick, done: done.length, total: this.threads.length, avgWait, utilization };
   }
 }
 

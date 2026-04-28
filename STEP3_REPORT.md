@@ -1,0 +1,308 @@
+# ThreadLab Project Report
+
+## 1. Project Overview
+
+### Project Title
+ThreadLab: Real-Time Multi-threaded Application Simulator
+
+### Problem Statement
+Develop a simulator to demonstrate multithreading models (Many-to-One, One-to-Many, Many-to-Many) and thread synchronization using semaphores and monitors. The simulator should visualize thread states and interactions, providing insights into thread management and CPU scheduling in multi-threaded environments.
+
+### Project Goal
+The goal of this project is to build an interactive simulator that helps users understand core operating-system concepts related to concurrency. The application visually demonstrates how threads are mapped, scheduled, synchronized, blocked, resumed, and completed during execution.
+
+### Expected Outcome
+The expected outcome is a usable educational simulator that:
+
+- demonstrates major threading models through live visual mapping
+- simulates synchronization primitives such as semaphores and monitors
+- visualizes CPU scheduling and execution order
+- helps learners understand deadlock detection and resolution
+- runs as both an Electron desktop app and a deployable web app
+
+### Scope
+The project covers:
+
+- threading model visualization
+- thread lifecycle and state transitions
+- synchronization primitives
+- CPU scheduling algorithms
+- deadlock simulation and recovery
+- desktop packaging and web deployment
+
+The project does not create actual operating-system kernel threads. It simulates them in a controlled educational environment.
+
+## 2. Module-Wise Breakdown
+
+### Module 1: GUI and User Interaction Module
+This module is responsible for the complete front-end experience of the simulator. It provides the visual shell, tab navigation, buttons, controls, sliders, logs, and state displays.
+
+Purpose:
+
+- allows users to interact with the simulator
+- displays thread states, kernel threads, scheduling output, and logs
+- provides separate views for threading, synchronization, scheduling, and deadlock
+
+Role in project:
+
+- serves as the presentation layer
+- collects user input and triggers simulation actions
+- renders the simulation state in real time
+
+### Module 2: Simulation Engine Module
+This is the core logic layer of the project. It handles simulated thread execution, mapping rules, synchronization primitives, CPU scheduler behavior, and deadlock logic.
+
+Purpose:
+
+- implements the behavior of all concurrency models
+- updates thread states over simulation ticks
+- models semaphores, monitors, barriers, scheduling, and deadlocks
+
+Role in project:
+
+- acts as the computational engine
+- drives all state changes shown in the GUI
+- generates logs and snapshots consumed by the UI
+
+### Module 3: Visualization and Analysis Module
+This module converts raw simulation data into diagrams, mappings, bars, and charts that are easy to understand. It makes the simulator educational rather than purely textual.
+
+Purpose:
+
+- presents user-thread to kernel-thread mapping
+- shows progress bars, CPU assignment, and scheduling traces
+- visualizes synchronization effects 
+
+Role in project:
+
+- makes abstract concurrency concepts visible
+- improves learning through animation and spatial representation
+- supports analysis of system behavior at runtime
+
+## 3. Functionalities
+
+### Module 1: GUI and User Interaction
+
+Key features:
+
+- tab-based layout for Threading Models, Synchronization, CPU Scheduler, and Deadlock
+- model selector and control buttons such as Run, Stop, Reset, and Add Thread
+- speed control for simulations
+- runtime badges for desktop/browser mode
+- activity logs for each simulation tab
+
+Examples:
+
+- a user selects Many-to-Many and clicks `Run` to observe thread-to-kernel mapping
+- a user changes Round Robin quantum and reruns the scheduler
+- a user clicks `Detect Deadlock` to check the current resource-allocation state
+
+### Module 2: Simulation Engine
+
+Key features:
+
+- Many-to-One simulation
+- One-to-One simulation
+- Many-to-Many simulation
+- Semaphore simulation with blocked and running threads
+- Monitor simulation using producer-consumer style behavior
+- Barrier synchronization
+- CPU scheduling with FCFS, SJF, Priority, and Round Robin
+- Deadlock simulation, detection, and resolution
+
+Examples:
+
+- in Many-to-One mode, a blocked thread can stall the whole process
+- in One-to-One mode, one blocked thread does not stop the others
+- in semaphore mode, the counter reaches zero and additional threads become blocked
+- in deadlock mode, circular wait is formed and later resolved by preemption
+
+### Module 3: Visualization and Analysis
+
+Key features:
+
+- user-thread and kernel-thread mapping diagram
+- progress bars for simulated execution
+- live CPU core display
+- queue and Gantt-style scheduling visualization
+- colored thread-state chips for ready, running, waiting, blocked, and done states
+- deadlock relationship and safe-sequence display
+
+Examples:
+
+- the mapping canvas shows which user thread is currently assigned to which kernel thread
+- the scheduler view displays process order and execution timing
+- semaphore and barrier views show which threads are waiting and which are released
+
+## 4. Technology Used
+
+### Programming Languages
+
+- JavaScript
+- HTML
+- CSS
+
+### Libraries and Tools
+
+- Electron
+- Node.js
+- electron-builder
+- SVG-based visualization
+
+### Other Tools
+
+- GitHub for version control
+- Git branches for feature-based development
+- local static server script for web preview
+- Vercel configuration for deployment
+- Render configuration for deployment
+
+### Note on Reference Document
+The attached reference PDF recommends a React + TypeScript + Tailwind architecture. The implemented project uses plain JavaScript, HTML, CSS, and Electron instead. The final implementation still satisfies the educational and functional goals of the assignment by providing the required simulator behavior and visualizations.
+
+## 5. Flow Diagram
+
+```mermaid
+flowchart TD
+    A["User Opens ThreadLab"] --> B["GUI Module"]
+    B --> C["User Selects Tab and Options"]
+    C --> D["Simulation Engine"]
+    D --> E["Threading Model Logic"]
+    D --> F["Synchronization Logic"]
+    D --> G["CPU Scheduler Logic"]
+    D --> H["Deadlock Logic"]
+    E --> I["State Snapshot"]
+    F --> I
+    G --> I
+    H --> I
+    I --> J["Visualization Module"]
+    J --> K["Mapping Diagram"]
+    J --> L["Logs and Status Panels"]
+    J --> M["Scheduler View"]
+    J --> N["Deadlock View"]
+    K --> O["Real-Time User Feedback"]
+    L --> O
+    M --> O
+    N --> O
+```
+
+## 6. Revision Tracking on GitHub
+
+### Repository Name
+`threadlab`
+
+### GitHub Link
+[https://github.com/deepak179-s/threadlab](https://github.com/deepak179-s/threadlab)
+
+### Branch-Based Workflow Used
+
+- `feature/shared-runtime`
+- `feature/web-deploy`
+- `feature/docs-polish`
+- `feature/macos-dmg`
+- `main`
+
+### Revision History
+
+1. `7d030e9` Initial commit
+2. `e8e5ad8` refactor: share the app shell across web and electron
+3. `9af6c1c` merge: shared runtime support
+4. `4252e8c` feat: add static hosting support for the web app
+5. `8c99409` fix: remove unrelated dependency churn from web setup
+6. `c547afd` merge: web deployment support
+7. `d1d5250` chore: add clearer dual-mode launch scripts
+8. `9e33793` docs: explain electron and web deployment workflows
+9. `de3c025` merge: dual-mode docs and scripts
+
+This satisfies the assignment requirement of maintaining at least 7 revisions and using branches for feature implementation before merge.
+
+## 7. Conclusion and Future Scope
+
+### Conclusion
+ThreadLab successfully demonstrates major concurrency concepts through an interactive simulator. It provides a practical and visual way to understand thread mapping, synchronization, scheduling, and deadlock behavior. The project also follows a structured GitHub workflow with multiple revisions and feature branches.
+
+### Future Scope
+
+- implement the exact `One-to-Many` model wording if required by the evaluator
+- add custom application icons and polished installer branding
+- add export of logs and simulation data to JSON or CSV
+- add more scheduling algorithms such as Multilevel Queue or Multilevel Feedback Queue
+- add test automation for simulation correctness
+- add a web-hosted public demo with analytics and tutorial mode
+
+## 8. References
+
+1. Attached reference document: `MultiThreaded_Simulator_ProjectDoc.pdf`
+2. Electron documentation: [https://www.electronjs.org/docs](https://www.electronjs.org/docs)
+3. GitHub documentation: [https://docs.github.com](https://docs.github.com)
+4. Vercel documentation: [https://vercel.com/docs](https://vercel.com/docs)
+5. Render documentation: [https://render.com/docs](https://render.com/docs)
+
+## Appendix
+
+### A. AI-Generated Project Elaboration/Breakdown Report
+
+#### Project Overview
+This project is an educational operating-systems simulator designed to explain multithreading and concurrency concepts visually. Instead of executing real kernel-managed threads, the application simulates thread behavior in a deterministic way so that learners can observe state transitions, synchronization effects, scheduling decisions, and deadlock scenarios clearly.
+
+#### Expected Outcomes
+
+- understand how thread models differ in mapping user threads to kernel threads
+- observe how synchronization primitives affect shared-resource access
+- learn how CPU scheduling changes process execution order
+- understand why deadlock occurs and how it can be detected or resolved
+
+#### Three-Module Breakdown
+
+##### 1. GUI Module
+
+- builds the application shell
+- handles controls and navigation
+- displays thread states, controls, and logs
+
+##### 2. Simulation Engine Module
+
+- simulates thread pools and state machines
+- models semaphores, monitors, barriers, schedulers, and deadlocks
+- emits state snapshots and event logs
+
+##### 3. Visualization Module
+
+- converts state into diagrams and interactive displays
+- highlights mappings, blocked threads, CPU assignment, and execution order
+- helps users analyze concurrency behavior visually
+
+#### Recommended Execution Plan
+
+1. define the project structure and repository
+2. implement the simulation engine first
+3. build the GUI shell and interaction controls
+4. connect the engine to the user interface
+5. add visual diagrams and logging
+6. test each module separately
+7. package for Electron and prepare web deployment
+
+#### Technology Recommendation
+
+- JavaScript for logic
+- HTML/CSS for interface
+- Electron for desktop packaging
+- GitHub for revision tracking
+
+### B. Problem Statement
+
+Develop a simulator to demonstrate multithreading models (Many-to-One, One-to-Many, Many-to-Many) and thread synchronization using semaphores and monitors. The simulator should visualize thread states and interactions, providing insights into thread management and CPU scheduling in multi-threaded environments.
+
+### C. Solution/Code
+
+The complete source code is available in this project repository:
+
+- main entry: `main.js`
+- preload bridge: `preload.js`
+- shared web entry: `index.html`
+- UI logic: `src/app.js`
+- simulation engine: `src/engine.js`
+- styling: `src/styles.css`
+- packaging and metadata: `package.json`
+
+For final academic submission, Appendix C can include the full printed source code from these files or an exported repository snapshot, depending on the submission format required by your faculty.
